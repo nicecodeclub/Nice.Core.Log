@@ -3,10 +3,7 @@ using System.IO;
 
 namespace Nice.Core.Log
 {
-    /// <summary>
-    /// 日志基本信息
-    /// </summary>
-    public class Log
+    public class TextLog : ILog
     {
         #region 业务标识常量
         internal const string bizError = "errorlog";
@@ -54,7 +51,7 @@ namespace Nice.Core.Log
             set { lastWriteTime = value; }
         }
 
-        public Log(string _content)
+        public TextLog(string _content)
         {
             logType = LogEnum.Error;
             timeGranularity = TimeGranularity.Daily;
@@ -62,7 +59,7 @@ namespace Nice.Core.Log
             lastWriteTime = DateTime.Now;
         }
 
-        public Log(LogEnum _logType, string _content)
+        public TextLog(LogEnum _logType, string _content)
         {
             logType = _logType;
             timeGranularity = TimeGranularity.Daily;
@@ -70,7 +67,7 @@ namespace Nice.Core.Log
             lastWriteTime = DateTime.Now;
         }
 
-        public Log(LogEnum _logType, TimeGranularity _timeGranularity, string _content)
+        public TextLog(LogEnum _logType, TimeGranularity _timeGranularity, string _content)
         {
             logType = _logType;
             timeGranularity = _timeGranularity;
@@ -83,7 +80,7 @@ namespace Nice.Core.Log
         /// <param name="biz">业务标识,如:登录-Login</param>
         /// <param name="_content">内容</param>
         /// <param name="_timeGranularity">时间粒度</param>
-        public Log(string biz, string _content, TimeGranularity _timeGranularity)
+        public TextLog(string biz, string _content, TimeGranularity _timeGranularity)
         {
             this.logType = LogEnum.Customize;
             this.bizSign = biz;
@@ -92,7 +89,7 @@ namespace Nice.Core.Log
             this.lastWriteTime = DateTime.Now;
         }
 
-        public string GetFilename(string logDir)
+        public string GetFullname(string logDir)
         {
             string dir = null;
 
@@ -146,7 +143,14 @@ namespace Nice.Core.Log
 
             return Path.Combine(dir, name + ".txt");
         }
+
+        public override string ToString()
+        {
+            return content;
+        }
     }
+
+
     /// <summary>
     /// 日志枚举类型,1-普通信息,2-警告,3-错误,4-成功,5-自定义
     /// </summary>
